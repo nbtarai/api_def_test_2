@@ -1,0 +1,86 @@
+openapi: "3.0.3"
+info:
+  title: サンプルAPI
+  version: "1.0"
+  description: |
+    登録操作を行います。
+servers:
+  - url: https://dev.sample.com
+    description: dev環境
+  - url: https://stg.sample.com
+    description: stg環境
+tags:
+  - name: Operations
+paths:
+  /register:
+    post:
+      summary: 登録
+      operationId: register
+      tags:
+        - Operations
+      description: |
+        登録します。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - address
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: |
+                    名前
+                address:
+                  type: string
+                  description: |
+                    住所
+      responses:
+        "200":
+          description: |
+            OK  
+            登録成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: |
+                      登録したデータを識別するためのIDです。
+        "400":
+          description: |
+            Bad Request  
+            リクエストエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: integer
+                    example: 1001
+                    description: |
+                      1001: リクエストパラメータ不正
+
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  responses:
+    InternalServerError:
+      description: |
+        Internal Server Error  
+        共通サーバーエラー
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error_code:
+                type: integer
+                example: 5001
+                description: |
+                  5001: DBエラー
